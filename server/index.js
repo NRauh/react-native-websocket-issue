@@ -9,9 +9,11 @@ const wss = new WebSocket.Server({
 wss.on('connection', (ws) => {
   console.log('someone connected');
 
-  ws.on('message', (message) => {
-    console.log('received:', message);
+  ws.on('message', (chatMessage) => {
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(chatMessage);
+      }
+    });
   });
-
-  ws.send('something');
 });
