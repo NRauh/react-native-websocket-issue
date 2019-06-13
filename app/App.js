@@ -20,10 +20,40 @@ export default class App extends Component {
     super(props);
 
     this.sendChatMessage = this.sendChatMessage.bind(this);
+
+    this.ws = new WebSocket('ws://localhost:8080', 'funtocol');
+
+    this.ws.addEventListener('error', (err) => {
+      console.error('error with websocket:', err);
+    });
+
+    this.ws.addEventListener('open', () => {
+      console.log('i opened the connection', this.ws.protocol);
+    });
+
+    this.ws.addEventListener('close', () => {
+      console.log('i closed the connection', this.ws.protocol);
+    });
+  }
+
+  componentDidMount() {
+    this.ws.addEventListener('message', (message) => {
+      console.log('i got a message', message.data);
+
+      this.setState((state) => {
+        const chatMessages = state.chatMessages.concat(message.data);
+        console.log('will set this', chatMessages);
+
+        return {
+          chatMessages
+        };
+      });
+    });
   }
 
   sendChatMessage() {
     console.log('sending message', this.state.chatMessage);
+    this.ws.send(this.state.chatMessage);
   }
 
   render() {
