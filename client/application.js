@@ -1,11 +1,11 @@
-const ws = new WebSocket('ws://localhost:8080');
+const ws = new WebSocket('ws://localhost:8080', 'funtocol');
 
 ws.addEventListener('error', (err) => {
   console.error('error with websocket:', err);
 });
 
 ws.addEventListener('open', () => {
-  console.log('opened connection');
+  console.log('opened connection', ws.protocol);
 });
 
 ws.addEventListener('close', () => {

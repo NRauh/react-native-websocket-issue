@@ -2,6 +2,10 @@ const WebSocket = require('ws');
 
 const wss = new WebSocket.Server({
   port: 8080,
+  handleProtocols(protocols, req) {
+    console.log('joineding with protocols', protocols);
+    return 'funtocol';
+  },
 }, () => {
   console.log('server started');
 });
@@ -16,4 +20,6 @@ wss.on('connection', (ws) => {
       }
     });
   });
+
+  ws.send('you have joined');
 });
